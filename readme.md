@@ -6,5 +6,5 @@ Daniel Hloušek
 
 * klasická hra sokoban
 * načítání levelů z veřejného serveru
-* ukládání levelu, pro offline pouužití
+* ukládání levelu, pro offline použití
 * ukládání high-score do databáze
