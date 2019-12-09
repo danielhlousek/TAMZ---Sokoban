@@ -1,6 +1,8 @@
 package com.example.sokoban33;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import static com.example.sokoban33.R.menu.menu_main;
@@ -26,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         SokoView sv =  (SokoView)findViewById(R.id.sokoView);
 
         try {
+
+            this.activeLevel = getIntent().getIntExtra("levelId", this.activeLevel);
             loadLevel();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -57,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if(item.getItemId() == R.id.level1Item) {
-            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
+        if(item.getItemId() == R.id.homeItem) {
+            /*SokoView sv =  (SokoView)findViewById(R.id.sokoView);
             this.activeLevel = 1;
             try {
                 this.loadLevel();
@@ -68,22 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             sv.invalidate();
-
+            */
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            startActivity(intent);
         }
 
-        if(item.getItemId() == R.id.level2Item) {
-            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
-            this.activeLevel = 2;
-            try {
-                this.loadLevel();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            sv.invalidate();
-
-        }
         return super.onOptionsItemSelected(item);
     }
 

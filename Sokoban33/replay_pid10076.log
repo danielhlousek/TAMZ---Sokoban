@@ -1,0 +1,41 @@
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 169 ciObject found
+ciMethod java/lang/Object getClass ()Ljava/lang/Class; 2049 1 256 0 -1
+ciMethod java/lang/Class isArray ()Z 2049 1 256 0 -1
+ciMethod java/lang/System arraycopy (Ljava/lang/Object;ILjava/lang/Object;II)V 5121 1 640 0 -1
+ciMethod java/lang/System identityHashCode (Ljava/lang/Object;)I 2049 1 256 0 -1
+ciMethod java/lang/Math min (II)I 3073 1 120610 0 -1
+ciMethod java/io/OutputStream write ([BII)V 57 1217 7 0 -1
+ciMethod org/gradle/internal/serialize/Encoder writeBytes ([BII)V 0 0 1 0 -1
+ciMethod org/gradle/internal/serialize/AbstractEncoder$EncoderStream write ([BII)V 2169 1 5413 0 448
+ciMethod org/gradle/internal/serialize/kryo/KryoBackedEncoder writeBytes ([BII)V 2169 1 5415 0 384
+ciMethod com/esotericsoftware/kryo/io/Output require (I)Z 665 1 5303 0 -1
+ciMethod com/esotericsoftware/kryo/io/Output writeBytes ([BII)V 2177 1 5415 0 0
+ciMethod java/io/Bits putInt ([BII)V 1993 1 1273 0 -1
+ciMethod java/io/ObjectStreamClass lookup (Ljava/lang/Class;Z)Ljava/io/ObjectStreamClass; 2049 1 5530 0 -1
+ciMethod java/io/ObjectStreamClass hasWriteReplaceMethod ()Z 1777 1 5181 0 -1
+ciMethod java/io/ObjectStreamClass invokeWriteReplace (Ljava/lang/Object;)Ljava/lang/Object; 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream replaceObject (Ljava/lang/Object;)Ljava/lang/Object; 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream writeObject0 (Ljava/lang/Object;Z)V 2049 1 6016 0 -1
+ciMethod java/io/ObjectOutputStream writeNull ()V 745 1 3412 0 -1
+ciMethod java/io/ObjectOutputStream writeHandle (I)V 905 1 3838 0 -1
+ciMethod java/io/ObjectOutputStream writeClass (Ljava/lang/Class;Z)V 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream writeClassDesc (Ljava/io/ObjectStreamClass;Z)V 2073 1 8818 0 -1
+ciMethod java/io/ObjectOutputStream writeString (Ljava/lang/String;Z)V 1497 1 4129 0 -1
+ciMethod java/io/ObjectOutputStream writeArray (Ljava/lang/Object;Ljava/io/ObjectStreamClass;Z)V 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream writeEnum (Ljava/lang/Enum;Ljava/io/ObjectStreamClass;Z)V 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream writeOrdinaryObject (Ljava/lang/Object;Ljava/io/ObjectStreamClass;Z)V 1313 1 3863 0 -1
+ciMethod java/io/ObjectOutputStream$BlockDataOutputStream setBlockDataMode (Z)Z 2169 1 22319 0 0
+ciMethod java/io/ObjectOutputStream$BlockDataOutputStream drain ()V 1089 1 5323 0 0
+ciMethod java/io/ObjectOutputStream$BlockDataOutputStream writeBlockHeader (I)V 0 0 2 0 0
+ciMethod java/io/ObjectOutputStream$HandleTable lookup (Ljava/lang/Object;)I 2081 649 5430 0 416
+ciMethod java/io/ObjectOutputStream$HandleTable hash (Ljava/lang/Object;)I 2281 1 9157 0 0
+ciMethod java/io/ObjectOutputStream$ReplaceTable assign (Ljava/lang/Object;Ljava/lang/Object;)V 0 0 1 0 -1
+ciMethod java/io/ObjectOutputStream$ReplaceTable lookup (Ljava/lang/Object;)Ljava/lang/Object; 2041 1 6015 0 0
+ciMethod org/gradle/internal/io/StreamByteBuffer allocateSpace ()I 4097 1 1627 0 -1
+ciMethod org/gradle/internal/io/StreamByteBuffer access$000 (Lorg/gradle/internal/io/StreamByteBuffer;)Lorg/gradle/internal/io/StreamByteBuffer$StreamByteBufferChunk; 1025 1 128 0 -1
+ciMethod org/gradle/internal/io/StreamByteBuffer$StreamByteBufferOutputStream write ([BII)V 1305 1305 163 0 0
+ciMethod org/gradle/internal/io/StreamByteBuffer$StreamByteBufferChunk write ([BII)V 1305 1 163 0 -1
+ciMethodData java/io/ObjectOutputStream$BlockDataOutputStream drain ()V 2 5323 orig 264 8 206 82 105 0 0 0 0 48 177 186 29 0 0 0 0 200 1 0 0 32 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 136 0 0 0 25 162 0 0 1 0 0 0 31 20 0 0 0 0 0 0 2 0 0 0 0 0 8 0 2 0 0 0 128 0 0 0 255 255 255 255 7 0 4 0 0 0 0 0 data 16 0x40007 0xad3 0x20 0x970 0xce007 0xad3 0x30 0x2 0x140002 0x2 0x244005 0x0 0x18c1d950 0xad5 0x18c1da00 0x2 oops 2
