@@ -1,13 +1,18 @@
 package com.example.sokoban33;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -15,6 +20,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -23,6 +30,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.util.Scanner;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 /**
  * Created by kru13 on 12.10.16.
@@ -41,19 +50,30 @@ public class SokoView extends View{
     public int level[] = new int [100];
     public int originalLevel[] = new int [100];
 
+    public int score = 0;
+
+    public TextView myScore;
+
+    public int activeLevelName;
+
+    DatabaseHelper myDb;
+
     public SokoView(Context context) {
         super(context);
         init(context);
+        myDb = new DatabaseHelper(getContext());
     }
 
     public SokoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+        myDb = new DatabaseHelper(getContext());
     }
 
     public SokoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+        myDb = new DatabaseHelper(getContext());
     }
 
     void init(Context context) {
@@ -98,14 +118,17 @@ public class SokoView extends View{
                 if(canMove(smer, playerIndex) && !boxokOn(smer, playerIndex)) {
                     if(!boxOn(smer, playerIndex)) {
                         movePlayer(smer, playerIndex);
+                        updateScore();
                     } else {
                         if(canMoveBox(smer, playerIndex)) {
                             moveBox(smer, playerIndex);
                             movePlayer(smer, playerIndex);
+
+                            updateScore();
                         }
                     }
                     if(win()) {
-                        Toast.makeText(this.getContext(), "Vyhrál jsi!", Toast.LENGTH_SHORT).show();
+                        showAddItemDialog(getContext());
                     }
                 }
                 this.invalidate();
@@ -113,6 +136,41 @@ public class SokoView extends View{
             }
         }
         return true;
+    }
+
+    private void showAddItemDialog(Context c) {
+        final EditText taskEditText = new EditText(c);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle("Your score is " + String.valueOf(score))
+                .setMessage("Enter your name:")
+                .setView(taskEditText)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String task = String.valueOf(taskEditText.getText());
+                        boolean isInserted = myDb.insertData(task, score, activeLevelName);
+                        if(isInserted) {
+                            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(getContext(), HighScoresActivity.class);
+                            startActivity(getContext(), intent, new Bundle());
+
+                        } else {
+                            Toast.makeText(getContext(), "Saving failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
+
+    private void updateScore() {
+        this.score++;
+        myScore = (TextView)this.getRootView().findViewById(R.id.myScore);
+        if(myScore != null) {
+            myScore.setText("Score: " + String.valueOf(score));
+        }
     }
 
     private boolean win() {

@@ -15,14 +15,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class WebViewActivity extends AppCompatActivity {
 
@@ -54,11 +58,13 @@ public class WebViewActivity extends AppCompatActivity {
                 myRequest.allowScanningByMediaScanner();
                 myRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-                myRequest.setDestinationInExternalFilesDir(getApplicationContext(),null, URLUtil.guessFileName(
+                myRequest.setDestinationInExternalFilesDir(getApplicationContext(),null, "sokoLevels/"+URLUtil.guessFileName(
                         url, contentDisposition, mimetype));
 
                 DownloadManager myManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 myManager.enqueue(myRequest);
+
+
 
                 final File file = new File(Environment.getExternalStorageDirectory()
                         .getAbsolutePath(), "download1.txt");

@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.drawable.LevelListDrawable;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuView;
@@ -14,6 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -52,15 +57,20 @@ public class ChooseLevelActivity extends ListActivity {
 
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("levelId", item.id);
+                intent.putExtra("levelName", item.name);
                 startActivity(intent);
             }
         });
 
-        fillList("level");
+        try {
+            fillList("level");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
-    public void fillList(String levelName) {
+    public void fillList(String levelName) throws IOException {
 
         AssetManager am = getAssets();
 
@@ -68,10 +78,10 @@ public class ChooseLevelActivity extends ListActivity {
         InputStream is;
         LevelItem currentItem;
 
-        while(true) {
+        while (true) {
 
             try {
-                is = am.open("levels/"+levelName+i+".txt");
+                is = am.open("levels/" + levelName + i + ".txt");
 
                 currentItem = new LevelItem(i, levelName);
 
@@ -86,6 +96,61 @@ public class ChooseLevelActivity extends ListActivity {
             i++;
 
         }
+
+
+        File f2 = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", "");
+        File[] list = f2.listFiles();
+        int fc = list.length;
+
+        for(int j = 0; j < fc; j++) {
+            String fn = list[j].getName();
+            fn = fn.replace("download","").replace(".txt","");
+            currentItem = new LevelItem(Integer.parseInt(fn), "download");
+
+            listItems.add(currentItem);
+            adapter.notifyDataSetChanged();
+        }
+        /*
+        i = 1;
+        while(true) {
+            try {
+                File file = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", "download"+i+".txt");
+
+                File f2 = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", "");
+                File[] list = f2.listFiles();
+                int fc = list.length;
+
+                for(int j = 0; j < fc; j++) {
+                    String fn = list[j].getName();
+                    fn = fn.replace("download","").replace(".txt","");
+                    currentItem = new LevelItem(Integer.parseInt(fn), "download");
+
+                    listItems.add(currentItem);
+                    adapter.notifyDataSetChanged();
+                }
+
+                FileInputStream fis = new FileInputStream(file);
+                int c;
+                StringBuilder sb = new StringBuilder();
+
+                while ((c = fis.read()) != -1) {
+                    sb.append(String.valueOf((char) c));
+                }
+
+                Log.d("LEVEL count", "LEVEL COUNTT: " + i );
+
+                currentItem = new LevelItem(i, "download");
+
+                listItems.add(currentItem);
+                adapter.notifyDataSetChanged();
+            }
+
+            catch (Exception e) {
+                Log.d("LEVEL count", "BREJK" );
+                break;
+            }
+            i++;
+        }*/
     }
 
 

@@ -16,16 +16,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static android.support.v4.content.ContextCompat.startActivity;
+
 public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        final File file = new File(Environment.getExternalStorageDirectory()
-                .getAbsolutePath(), "/storage/emulated/0/Android/data/com.example.sokoban33/files/download1.txt");
-        Toast.makeText(this, "POJEB1 "+ readFile(file) + " - " + file.toString(), Toast.LENGTH_LONG).show();
     }
 
     public void loadChooseLevelIntent(View view) {
@@ -35,6 +33,11 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void loadDownloadIntent(View view) {
         Intent intent = new Intent(this, WebViewActivity.class);
+        startActivity(intent);
+    }
+
+    public void loadScoreIntent(View view) {
+        Intent intent = new Intent(this, HighScoresActivity.class);
         startActivity(intent);
     }
 

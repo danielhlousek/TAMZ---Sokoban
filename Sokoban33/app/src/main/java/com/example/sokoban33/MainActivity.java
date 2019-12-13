@@ -25,6 +25,7 @@ import static com.example.sokoban33.R.menu.menu_main;
 public class MainActivity extends AppCompatActivity {
 
     int activeLevel = 1;
+    String activeLevelName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             this.activeLevel = getIntent().getIntExtra("levelId", this.activeLevel);
+            this.activeLevelName = getIntent().getStringExtra("levelName");
             loadLevel();
+            sv.activeLevelName = this.activeLevel;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -87,31 +90,68 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void loadLevel() throws Exception {
-        SokoView sv =  (SokoView)findViewById(R.id.sokoView);
-        String lvlName = "level"+activeLevel+".txt";
-        StringBuilder sb = new StringBuilder();
+        if(activeLevelName.equals("level")) {
+            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
+            String lvlName = "level"+activeLevel+".txt";
+            StringBuilder sb = new StringBuilder();
 
-        AssetManager am = getAssets();
-        InputStream is = am.open("levels/"+lvlName);
-        Scanner input = new Scanner(is);
+            AssetManager am = getAssets();
+            InputStream is = am.open("levels/"+lvlName);
+            Scanner input = new Scanner(is);
 
-        while (input.hasNextLine()) {
-            String line = input.nextLine();
-            sb.append(line);
+            while (input.hasNextLine()) {
+                String line = input.nextLine();
+                sb.append(line);
+            }
+            input.close();
+            String levelString = sb.toString();
+
+            int[] levelArr = new int[100];
+
+            String[] levelStrArr = levelString.split(",");
+
+            for(int i = 0; i < 100;i++) {
+                levelArr[i] = Integer.valueOf(levelStrArr[i]);
+            }
+
+            System.arraycopy( levelArr, 0, sv.level, 0, levelArr.length );
+            System.arraycopy( levelArr, 0, sv.originalLevel, 0, levelArr.length );
+        } else {
+
+            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
+            String lvlName = "level"+activeLevel+".txt";
+            StringBuilder sb = new StringBuilder();
+
+
+            File file = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", activeLevelName+activeLevel+".txt");
+
+            FileInputStream fis = new FileInputStream(file);
+            int c;
+            StringBuilder sb2 = new StringBuilder();
+
+            while ((c = fis.read()) != -1) {
+                sb2.append(String.valueOf((char) c));
+            }
+
+
+            String levelString = sb2.toString().replace("\n", "").replace("\r", "");;
+
+            int[] levelArr = new int[100];
+
+            String[] levelStrArr = levelString.split(",");
+
+            for(int i = 0; i < 100;i++) {
+                levelArr[i] = Integer.valueOf(levelStrArr[i]);
+            }
+
+            System.arraycopy( levelArr, 0, sv.level, 0, levelArr.length );
+            System.arraycopy( levelArr, 0, sv.originalLevel, 0, levelArr.length );
+
         }
-        input.close();
-        String levelString = sb.toString();
+    }
 
-        int[] levelArr = new int[100];
+    public void updateScore() {
 
-        String[] levelStrArr = levelString.split(",");
-
-        for(int i = 0; i < 100;i++) {
-            levelArr[i] = Integer.valueOf(levelStrArr[i]);
-        }
-
-        System.arraycopy( levelArr, 0, sv.level, 0, levelArr.length );
-        System.arraycopy( levelArr, 0, sv.originalLevel, 0, levelArr.length );
     }
 
 }
