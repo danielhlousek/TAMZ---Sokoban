@@ -61,4 +61,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="loadDownloadIntent"/>
 
+    <Switch
+        android:id="@+id/soundSwitch"
+        android:layout_width="126dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="76dp"
+        android:onClick="soundSwitched"
+        android:text="Sound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="236dp"
+        android:onClick="loadContinue"
+        android:text="Continue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,9 @@
 package com.example.sokoban33;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,16 +28,22 @@ public class MainActivity extends AppCompatActivity {
 
     int activeLevel = 1;
     String activeLevelName;
+    SharedPreferences pref;
+    MediaPlayer loadLevel;
+    SharedPreferences.Editor editor;
+    Boolean continue_g = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadLevel = MediaPlayer.create(this, R.raw.sfx_sounds_pause2_in);
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
 
         SokoView sv =  (SokoView)findViewById(R.id.sokoView);
 
         try {
-
+            this.continue_g = getIntent().getBooleanExtra("continue", false);
             this.activeLevel = getIntent().getIntExtra("levelId", this.activeLevel);
             this.activeLevelName = getIntent().getStringExtra("levelName");
             loadLevel();
@@ -90,13 +98,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void loadLevel() throws Exception {
-        if(activeLevelName.equals("level")) {
-            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
-            String lvlName = "level"+activeLevel+".txt";
+        if (pref.getBoolean("sound", false)) {
+            loadLevel.start();
+        }
+        if (!this.continue_g) {
+
+        if (activeLevelName.equals("level")) {
+            SokoView sv = (SokoView) findViewById(R.id.sokoView);
+            String lvlName = "level" + activeLevel + ".txt";
             StringBuilder sb = new StringBuilder();
 
             AssetManager am = getAssets();
-            InputStream is = am.open("levels/"+lvlName);
+            InputStream is = am.open("levels/" + lvlName);
             Scanner input = new Scanner(is);
 
             while (input.hasNextLine()) {
@@ -110,20 +123,20 @@ public class MainActivity extends AppCompatActivity {
 
             String[] levelStrArr = levelString.split(",");
 
-            for(int i = 0; i < 100;i++) {
+            for (int i = 0; i < 100; i++) {
                 levelArr[i] = Integer.valueOf(levelStrArr[i]);
             }
 
-            System.arraycopy( levelArr, 0, sv.level, 0, levelArr.length );
-            System.arraycopy( levelArr, 0, sv.originalLevel, 0, levelArr.length );
+            System.arraycopy(levelArr, 0, sv.level, 0, levelArr.length);
+            System.arraycopy(levelArr, 0, sv.originalLevel, 0, levelArr.length);
         } else {
 
-            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
-            String lvlName = "level"+activeLevel+".txt";
+            SokoView sv = (SokoView) findViewById(R.id.sokoView);
+            String lvlName = "level" + activeLevel + ".txt";
             StringBuilder sb = new StringBuilder();
 
 
-            File file = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", activeLevelName+activeLevel+".txt");
+            File file = new File("/storage/emulated/0/Android/data/com.example.sokoban33/files/sokoLevels", activeLevelName + activeLevel + ".txt");
 
             FileInputStream fis = new FileInputStream(file);
             int c;
@@ -134,19 +147,41 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            String levelString = sb2.toString().replace("\n", "").replace("\r", "");;
+            String levelString = sb2.toString().replace("\n", "").replace("\r", "");
+
 
             int[] levelArr = new int[100];
 
             String[] levelStrArr = levelString.split(",");
 
-            for(int i = 0; i < 100;i++) {
+            for (int i = 0; i < 100; i++) {
                 levelArr[i] = Integer.valueOf(levelStrArr[i]);
             }
 
-            System.arraycopy( levelArr, 0, sv.level, 0, levelArr.length );
-            System.arraycopy( levelArr, 0, sv.originalLevel, 0, levelArr.length );
+            System.arraycopy(levelArr, 0, sv.level, 0, levelArr.length);
+            System.arraycopy(levelArr, 0, sv.originalLevel, 0, levelArr.length);
 
+        }
+    } else {
+            SokoView sv =  (SokoView)findViewById(R.id.sokoView);
+            String lvlName = "level1.txt";
+            StringBuilder sb = new StringBuilder();
+
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append(this.pref.getString("continueLevel",""));
+
+            String levelString = sb2.toString().replace("\n", "").replace("\r", "");
+
+            int[] levelArr = new int[100];
+
+            String[] levelStrArr = levelString.split(",");
+
+            for (int i = 0; i < 100; i++) {
+                levelArr[i] = Integer.valueOf(levelStrArr[i]);
+            }
+
+            System.arraycopy(levelArr, 0, sv.level, 0, levelArr.length);
+            System.arraycopy(levelArr, 0, sv.originalLevel, 0, levelArr.length);
         }
     }
 
@@ -154,4 +189,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        editor = pref.edit();
+                SokoView sv =  (SokoView)findViewById(R.id.sokoView);
+        int originalLevel[] = sv.level;
+        StringBuilder sb = new StringBuilder();
+
+        for (int v:
+             originalLevel) {
+            sb.append(String.valueOf(v));
+            sb.append(",");
+        }
+
+        String lvlStr = sb.toString();
+        lvlStr = lvlStr.substring(0, lvlStr.length()-1);
+        editor.putString("continueLevel",lvlStr);
+        editor.commit();
+
+        System.arraycopy( originalLevel, 0, sv.level, 0, originalLevel.length );
+
+    }
 }

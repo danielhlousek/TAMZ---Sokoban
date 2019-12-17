@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -12,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
@@ -47,6 +49,9 @@ public class SokoView extends View{
     int width;
     int height;
 
+    SharedPreferences pref;
+    MediaPlayer move, moveWithBox, winSound;
+
     public int level[] = new int [100];
     public int originalLevel[] = new int [100];
 
@@ -62,18 +67,30 @@ public class SokoView extends View{
         super(context);
         init(context);
         myDb = new DatabaseHelper(getContext());
+        move = MediaPlayer.create(context, R.raw.move);
+        moveWithBox = MediaPlayer.create(context, R.raw.mwb);
+        winSound = MediaPlayer.create(context, R.raw.atwi);
+        pref = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
     }
 
     public SokoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
         myDb = new DatabaseHelper(getContext());
+        move = MediaPlayer.create(context, R.raw.move);
+        moveWithBox = MediaPlayer.create(context, R.raw.mwb);
+        winSound = MediaPlayer.create(context, R.raw.atwi);
+        pref = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
     }
 
     public SokoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
         myDb = new DatabaseHelper(getContext());
+        move = MediaPlayer.create(context, R.raw.move);
+        moveWithBox = MediaPlayer.create(context, R.raw.mwb);
+        winSound = MediaPlayer.create(context, R.raw.atwi);
+        pref = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
     }
 
     void init(Context context) {
@@ -117,10 +134,16 @@ public class SokoView extends View{
 
                 if(canMove(smer, playerIndex) && !boxokOn(smer, playerIndex)) {
                     if(!boxOn(smer, playerIndex)) {
+                        if(this.pref.getBoolean("sound",false)) {
+                            move.start();
+                        }
                         movePlayer(smer, playerIndex);
                         updateScore();
                     } else {
                         if(canMoveBox(smer, playerIndex)) {
+                            if(this.pref.getBoolean("sound",false)) {
+                                moveWithBox.start();
+                            }
                             moveBox(smer, playerIndex);
                             movePlayer(smer, playerIndex);
 
@@ -128,7 +151,10 @@ public class SokoView extends View{
                         }
                     }
                     if(win()) {
-                        showAddItemDialog(getContext());
+                        if(this.pref.getBoolean("sound",false)) {
+                            winSound.start();
+                            showAddItemDialog(getContext());
+                        }
                     }
                 }
                 this.invalidate();
