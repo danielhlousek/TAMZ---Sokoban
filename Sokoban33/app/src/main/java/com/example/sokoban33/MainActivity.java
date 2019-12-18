@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -44,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             this.continue_g = getIntent().getBooleanExtra("continue", false);
+            if(this.continue_g)
+                sv.score = pref.getInt("continueScore",0);
+            else
+                sv.score = 0;
             this.activeLevel = getIntent().getIntExtra("levelId", this.activeLevel);
             this.activeLevelName = getIntent().getStringExtra("levelName");
             loadLevel();
@@ -72,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
             for(int i = 0;i<sv.level.length; i++) {
                 sv.level[i] = sv.originalLevel[i];
             }*/
+
+            sv.score = 0;
+            TextView ms = (TextView)findViewById(R.id.myScore);
+            ms.setText("Score: 0");
 
             System.arraycopy( originalLevel, 0, sv.level, 0, originalLevel.length );
             sv.invalidate();
@@ -180,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
                 levelArr[i] = Integer.valueOf(levelStrArr[i]);
             }
 
+            sv.score = pref.getInt("continueScore",0);
+
             System.arraycopy(levelArr, 0, sv.level, 0, levelArr.length);
             System.arraycopy(levelArr, 0, sv.originalLevel, 0, levelArr.length);
         }
@@ -207,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         String lvlStr = sb.toString();
         lvlStr = lvlStr.substring(0, lvlStr.length()-1);
         editor.putString("continueLevel",lvlStr);
+        editor.putInt("continueScore",sv.score);
         editor.commit();
 
         System.arraycopy( originalLevel, 0, sv.level, 0, originalLevel.length );

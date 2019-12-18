@@ -3,6 +3,7 @@ package com.example.sokoban33;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class HighScoresActivity extends AppCompatActivity {
@@ -30,5 +31,11 @@ public class HighScoresActivity extends AppCompatActivity {
             buffer.append("#" + (Integer.valueOf(res.getPosition())+1) + "        " + res.getString(0) +"         "+ res.getString(1) +"          "+ res.getString(2) + "\n\r");
         }
         scoreList.setText(buffer.toString());
+    }
+
+    public void clearScore(View view) {
+        myDb.deleteScoreData();
+        finish();
+        startActivity(getIntent());
     }
 }

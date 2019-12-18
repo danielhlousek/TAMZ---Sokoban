@@ -52,4 +52,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public void deleteScoreData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NAME);
+    }
+
 }

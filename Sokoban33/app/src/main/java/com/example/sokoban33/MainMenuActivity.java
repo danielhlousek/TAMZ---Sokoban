@@ -38,10 +38,11 @@ public class MainMenuActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         editor = pref.edit();
 
+        toggleSound.setChecked(pref.getBoolean("sound",false));
+
         menu_select = MediaPlayer.create(this, R.raw.sfx_menu_select3);
 
         String isCont = pref.getString("continueLevel","");
-        Toast.makeText(this, isCont, Toast.LENGTH_LONG).show();
         if(!isCont.equals("") && isCont.contains("4")) {
             Button cb = (Button) findViewById(R.id.continueButton);
             cb.setVisibility(1);
@@ -102,7 +103,6 @@ public class MainMenuActivity extends AppCompatActivity {
         editor.putBoolean("sound",swVal);
         editor.commit();
 
-        Toast.makeText(this, "switched "+ swVal.toString(), Toast.LENGTH_SHORT).show();
     }
 
 
